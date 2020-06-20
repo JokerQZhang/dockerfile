@@ -1,0 +1,27 @@
+version: '3.1'
+
+services:
+  wordpress:
+    image: wordpress
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpressdb
+    volumes:
+      - /e/workspace/wordpress:/var/www/html
+# 如果是win10的docker desktop，使用这种方法可以将wordpress的源码映射到windows的磁盘上，前提是要在docker desktop的settings里面，Shared Drivers,把要共享的盘勾上然后apply。共享磁盘后文件夹路径用斜杠即可
+# 不可用win的盘符，如c盘路径则为：/c，E盘路径为/e
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: wordpressdb
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+      MYSQL_RANDOM_ROOT_PASSWORD: '1'
+    volumes:
+      - /e/workspace/mysql:/var/lib/mysql
